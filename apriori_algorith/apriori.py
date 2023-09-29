@@ -3,7 +3,7 @@
 
 from itertools import combinations
 from collections import Counter
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 import pandas as pd
 import logging
 
@@ -142,7 +142,7 @@ def display_itemset_table_using_pandas(itemset_table: Dict[frozenset, Dict[str, 
     print(df.to_string())
     print()
 
-def get_max_itemset(itemset_table):
+def get_max_itemset(itemset_table: Dict[frozenset, Dict[str, Any]]) -> List[frozenset]:
     # Get the maximum itemset length
     max_length = max(len(itemset) for itemset in itemset_table)
 
@@ -151,12 +151,12 @@ def get_max_itemset(itemset_table):
 
     return max_itemsets
 
-def get_nonempty_subsets(itemset):
+def get_nonempty_subsets(itemset: frozenset) -> List[frozenset]:
     subsets = generate_subsets(itemset)
     nonempty_subsets = [subset for subset in subsets if subset != itemset and len(subset) > 0]
     return nonempty_subsets
 
-def find_association_rules(itemset, itemset_table):
+def find_association_rules(itemset: frozenset, itemset_table: Dict[frozenset, Dict[str, Any]]) -> List[Tuple[frozenset, frozenset]]:
     """
     Finds association rules for a given itemset based on the provided itemset table.
     Args:
@@ -183,7 +183,7 @@ def find_association_rules(itemset, itemset_table):
 
     return association_rules
 
-def calculate_confidence(rule, itemset_table):
+def calculate_confidence(rule: Tuple[frozenset, frozenset], itemset_table: Dict[frozenset, Dict[str, Any]]) -> float:
     """Calculates the confidence for an association rule.
     Args:
         rule: A tuple representing the association rule (A, B).
@@ -211,7 +211,7 @@ def calculate_confidence(rule, itemset_table):
         logging.error(f"ZeroDivisionError: {str(e)}")
         return None
     
-def display_association_rules(itemset_table, max_itemsets, MIN_CONF):
+def display_association_rules(itemset_table: Dict[frozenset, Dict[str, Any]], max_itemsets: List[frozenset], MIN_CONF: float) -> None:
     """
     Display association rules based on the provided itemset_table, max_itemsets,
     and minimum confidence.
@@ -252,7 +252,7 @@ if __name__ == "__main__":
 
     itemset_table = create_itemset_table(D, MIN_SUP)
 
-    # Print the itemset table in a human-readable format using the pandas library
+    # Print the itemset table
     display_itemset_table_using_pandas(itemset_table)
     max_itemsets = get_max_itemset(itemset_table)
 
